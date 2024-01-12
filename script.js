@@ -1,7 +1,44 @@
 let storyBox = document.getElementById('story-section');
+let imageBox = document.getElementById('image-section');
 let choiceSection = document.getElementById('choices');
 let chapter=0;
 let certainChoices = {};
+let images = {
+    intro: 'start/intro.jpg',
+    cabin: 'outside/cabin.jpg',
+    door: 'outside/door.png',
+    kitchen:{
+        allBowls:               'kitchen/kitchen-allBowls.jpg',
+        noBowls:                'kitchen/kitchen-noBowls.jpg',
+        smallBowl:              'kitchen/kitchen-smallBowl.jpg',
+        mediumBowl:             'kitchen/kitchen-mediumBowl.jpg',
+        largeBowl:              'kitchen/kitchen-largeBowl.jpg',
+        smallAndMediumBowls:    'kitchen/kitchen-smallAndMediumBowls.jpg',
+        smallAndLargeBowls:     'kitchen/kitchen-smallAndLargeBowls.jpg',
+        mediumAndlargeBowls:    'kitchen/kitchen-mediumAndLargeBowls.jpg'
+    },
+    livingroom:{
+        allChairs:               'kitchen/livingroom-allChairs.jpg',
+        noChairs:                'kitchen/livingroom-noChairs.jpg',
+        smallChair:              'kitchen/livingroom-smallChair.jpg',
+        mediumChair:             'kitchen/livingroom-mediumChair.jpg',
+        largeChair:              'kitchen/livingroom-largeChair.jpg',
+        smallAndMediumChairs:    'kitchen/livingroom-smallAndMediumChairs.jpg',
+        smallAndLargeChairs:     'kitchen/livingroom-smallAndLargeChairs.jpg',
+        mediumAndlargeChairs:    'kitchen/livingroom-mediumAndLargeChairs.jpg'
+    },
+    bedroom:{
+        allBeds:               'kitchen/bedroom-allBeds.jpg',
+        noBeds:                'kitchen/bedroom-noBeds.jpg',
+        smallBed:              'kitchen/bedroom-smallBed.jpg',
+        mediumBed:             'kitchen/bedroom-mediumBed.jpg',
+        largeBed:              'kitchen/bedroom-largeBed.jpg',
+        smallAndMediumBeds:    'kitchen/bedroom-smallAndMediumBeds.jpg',
+        smallAndLargeBeds:     'kitchen/bedroom-smallAndLargeBeds.jpg',
+        mediumAndlargeBeds:    'kitchen/bedroom-mediumAndLargeBeds.jpg'
+    }
+
+}
 const setUpStartVariables = () =>{
     certainChoices = {
         hasKnockedOnTheDoor:false,
@@ -35,6 +72,10 @@ const createChoices = (choices) =>{
     }
     return result;
 }
+const updateImage = (imageName = null) =>{
+
+    imageBox.innerHTML = imageName === null ? '' : `<img src="./img/${imageName}" alt="illustrering av vad som händer på skärmen"/>`;
+}
 /**
  * 
  * @param {string} storyContent 
@@ -50,6 +91,7 @@ const updateStory = (storyContent, buttonContent = null, isAddon = false) => {
 
 
 const choicePressed = (event = {target:{name:'default'}}) => {
+    updateImage();
     switch(chapter){
         //OM SPELET LEDER MOT ETT SLUT
         case -1:
@@ -85,7 +127,7 @@ const choicePressed = (event = {target:{name:'default'}}) => {
         case 1:
             switch(event.target.name){
                 case 'knock':
-                    
+                    updateImage(images.door);
                     updateStory(
                         certainChoices.hasKnockedOnTheDoor ? `Du undviker att knacka på dörren igen, känns lite onödigt när du redan prövat det.` : `Du valde att knacka på dörren, men ingen svarade.`, 
                         [{content:'Gå tillbaka'}]);
@@ -93,6 +135,7 @@ const choicePressed = (event = {target:{name:'default'}}) => {
 
                 break;
                 case 'goIn':
+                    updateImage(images.door);
                     updateStory(
                         `Du valde att gå in i huset..`, 
                         [{content:'Gå vidare'} ]);
@@ -100,13 +143,16 @@ const choicePressed = (event = {target:{name:'default'}}) => {
                         
                 break;
                 case 'goAway':
+
                     chapter = -1;
                     choicePressed();
                 break;
                 default:
+                    updateImage(images.cabin);
                     updateStory(
                         `Du stöter på ett hus mitt ute i skogen. Det finns inga vägar dit, och inga spår på att någon varit utanför på länge. Vad väljer du att göra?`, 
                         [{content:'Gå in',name:'goIn'}, {content:'Gå iväg',name:'goAway'},{content:'Knacka',name:'knock'} ]);
+                    
                 break;
             }
 
@@ -127,8 +173,9 @@ const choicePressed = (event = {target:{name:'default'}}) => {
                     );    
                 break;
                 default:
+                    updateImage(images.kitchen.allBowls);
                     updateStory(
-                        `Du kommer in i en fint dekorerad hall. Över hela väggarna finns det inramade bilder på björnar. Tre av dem verkar vara med på de flesta bilderna man ser.\n\nDu sneglar in i huset och ser tre skålar med gröt på ett stort matbord. Din mage kurrar.. Du funderar även på om du ska äta lite gröt när den ändå bara står och blir dålig. Hur ska du göra?`,
+                        `Du kommer in i en fint dekorerad hall. Över hela väggarna finns det inramade bilder på björnar. Tre av dem verkar vara med på de flesta bilderna man ser. Synd bara att det inte syns på bilden.\n\nDu sneglar in i huset och ser tre skålar med gröt på ett stort matbord. Din mage kurrar.. Du funderar även på om du ska äta lite gröt när den ändå bara står och blir dålig. Hur ska du göra?`,
                         [{content:'Äta',name:'yes'}, {content:'Inte äta',name:'no'}]
                     );
                     break;
@@ -136,8 +183,6 @@ const choicePressed = (event = {target:{name:'default'}}) => {
         break;
         //DAGS ATT ÄTA GRÖÖÖÖT
         case 3:
-            
-            
             switch(event.target.name){
                 case 'firstBowl':
                     updateStory(
@@ -169,6 +214,18 @@ const choicePressed = (event = {target:{name:'default'}}) => {
                     chapter++;
                 break;
                 default:
+                    if(certainChoices.eatenFirstBowl && certainChoices.eatenSecondBowl){
+                        updateImage(images.kitchen.smallBowl);   
+                    }
+                    else if(!certainChoices.eatenFirstBowl && certainChoices.eatenSecondBowl){
+                        updateImage(images.kitchen.smallAndLargeBowls);   
+                    }
+                    else if(certainChoices.eatenFirstBowl && !certainChoices.eatenSecondBowl){
+                        updateImage(images.kitchen.smallAndMediumBowls);   
+                    }else{
+                        updateImage(images.kitchen.allBowls);   
+                    }
+                    // let kitchenImage = 
                     updateStory(
                         `Vilken skål vill du äta från?`,
                         [{content:'Största skålen',name:'firstBowl'},{content:'Mellanstora skålen',name:'secondBowl'}, {content:'Lilla skålen',name:'thirdBowl'}]
@@ -190,6 +247,7 @@ const choicePressed = (event = {target:{name:'default'}}) => {
                 break;
                 default:
                     let hunger = certainChoices.amountOfBowlsEaten === 3? 'På grund av att du åt så mycket gröt så började du må väldigt illa. Men efter detta ' : certainChoices.amountOfBowlsEaten === 2 ? 'På grund av att du åt 2 skålar gröt så känner du dig lite dåsig och övermätt. Men efter detta ' : certainChoices.amountOfBowlsEaten === 1 ? 'Du känner dig lagom mätt efter gröten. Efter detta ' : 'Efter detta ' ;
+                    updateImage(images.livingroom.allChairs);
                     updateStory(
                         `${hunger} kommer du in till vardagsrummet. Där ser du tre olika stolar av olika kvalité. \n\nDu är ju lite trött i ryggen. Vill du sätta dig?`, 
                         [{content:'Ja', name:'yes'},{content:'Nej',name:'no'}]);
@@ -230,6 +288,17 @@ const choicePressed = (event = {target:{name:'default'}}) => {
 
                 break;
                 default:
+                    if(certainChoices.largeChairBroken && certainChoices.mediumChairBroken){
+                        updateImage(images.livingroom.smallChair);   
+                    }
+                    else if(!certainChoices.largeChairBroken && certainChoices.mediumChairBroken){
+                        updateImage(images.livingroom.smallAndLargeChairs);   
+                    }
+                    else if(certainChoices.largeChairBroken && !certainChoices.mediumChairBroken){
+                        updateImage(images.livingroom.smallAndMediumChairs);   
+                    }else{
+                        updateImage(images.livingroom.allChairs);   
+                    }
                     updateStory(`Det finns en större stol, en mellanstor stol och en liten stol. Vilken vill du sitta på? `, 
                     [{content:'Den största stolen',name:'largeChair'},{content:' Den mellanstora stolen',name:'mediumChair'}, {content:'Den lilla stolen',name:'smallChair'}]
                     );
@@ -260,6 +329,8 @@ const choicePressed = (event = {target:{name:'default'}}) => {
                         [{content:'Gå vidare'}]);
                 break;
                 default:
+                    updateImage(images.bedroom.allBeds);
+
                     let angry = 'Du tänker att du inte vill att andra sitter på dina stolar hemma utan att du vet, så du väljer att visa respekt i denna situationen.\n\nEfter detta';
                     if(certainChoices.smallChairBroken){
                         angry = certainChoices.largeChairBroken && certainChoices.mediumChairBroken  ? 'Av ren ilska och utmatthet' : 
@@ -436,8 +507,7 @@ const choicePressed = (event = {target:{name:'default'}}) => {
                         default:
                         break;
                     }
-                break;
-                
+                break;              
                 default:
                 break;
             }
@@ -445,14 +515,14 @@ const choicePressed = (event = {target:{name:'default'}}) => {
         break;
 
         default:
-            storyBox.innerText = '';
-            choiceSection.innerHTML = '';
+            updateStory('');
         break;
     }
 }
 
 const playGame = () => {
     setUpStartVariables();
+    updateImage(images.intro);
     updateStory(
         `Välkommen till Guldlock\n\nThe interactive (sort of) story!!`, 
         [{content:'Starta',name:'start'},{content:'Avsluta',name:'quit'}]);
@@ -463,65 +533,3 @@ const playGame = () => {
 
 
 playGame();
-/*
-OUTPUT: {
-Once upon a time, there was a little girl named Goldilocks. She went for a walk in the forest. Pretty soon, 
-she came upon a house. She knocked and, when no one answered, she walked right in.
-
-At the table in the kitchen, there were three bowls of porridge. Goldilocks was hungry. She tasted the porridge 
-from the first bowl.
-}
-
-INPUT: {Val av tallrik}
-
-Stora skål =            "This porridge is too hot!" she exclaimed.
-                        So, she tasted the porridge from the second bowl.
-            
-Mellanstora skålen =    "This porridge is too cold," she said.
-                        So, she tasted the last bowl of porridge.
-
-Lilla skålen = 
-"Ahhh, this porridge is just right," she said happily and she ate it all up.
-
-OUTPUT: {
-After she'd eaten the three bears' breakfasts, she decided she was feeling a little tired. So, she walked into 
-the living room where she saw three chairs. Goldilocks sat in the first chair to rest.
-}
-
-Stora stolen =          "This chair is too big!" she exclaimed.
-
-Mellanstora stolen =    So she sat in the second chair
-                        "This chair is too big, too!" she whined.
-
-Lilla stolen =          "Ahhh, this chair is just right," she sighed. But just as she settled down into the 
-                        chair to rest, it broke into pieces!
-OUTPUT:{
-Goldilocks was very tired by this time, she went upstairs to 
-the bedroom. She lay down in the first bed, but it was too hard. Then she lay in the second bed, but it was too 
-soft. Then she lay down in the third bed and it was just right. Goldilocks fell asleep.
-}
-OUTPUT:{
-As she was sleeping, the three bears came home.
-}
-OUTPUT:{
-"Someone's been eating my porridge," growled the Papa bear.
-"Someone's been eating my porridge," said the Mama bear.
-"Someone's been eating my porridge and they ate it all up!" cried the Baby bear.
-}
-OUTPUT:{
-"Someone's been sitting in my chair," growled the Papa bear.
-"Someone's been sitting in my chair," said the Mama bear.
-"Someone's been sitting in my chair and they've broken it to pieces," cried the Baby bear.
-}
-OUTPUT:{
-They decided to look around some more and when they got upstairs to the bedroom, Papa bear growled,
-}
-OUTPUT:{
-"Someone's been sleeping in my bed.”
-"Someone's been sleeping in my bed, too" said the Mama bear.
-"Someone's been sleeping in my bed and she's still there!" exclaimed the Baby bear.
-}
-OUTPUT:{
-Just then, Goldilocks woke up. She saw the three bears. She screamed, "Help!" And she jumped up and ran out of the room. Goldilocks ran down the stairs, opened the door, and ran away into the forest. She never returned to the home of the three bears.
-}
-*/
