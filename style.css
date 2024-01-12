@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Salsa&display=swap');
+*{
+    font-family: 'Salsa', cursive;
+}
+.main-story-section{
+    display:flex;
+    flex-direction: column;
+    min-width:500px;
+    width:75%;
+    margin:0 auto;
+    background:silver;
+
+}
+h1{
+    font-family: 'Indie Flower', cursive;
+
+    display:inline-block;
+    text-align: center;
+    font-size: 5rem;
+    line-height: 1rem;
+}
+#story-section{
+    border: solid 2px black;
+    margin: 1rem;
+    padding: 1rem;
+    font-size: 2rem;
+    line-height: 2.5rem;
+    text-align: center;
+    font-weight:bold;
+    min-height: 500px;
+
+
+}
+#choices{
+    display:flex;
+    justify-content: space-around;
+    margin-bottom: 1rem;
+}
+.option{
+    background:transparent;
+    color:blue;
+    border:solid 3px blue;
+    font-size: 3rem;
+    padding:1.5rem 1rem;
+    border-radius:1rem;
+    transition: all .2s;
+    cursor: pointer;
+}
+.option:hover{
+    border-color:white;
+    color:white;
+}
