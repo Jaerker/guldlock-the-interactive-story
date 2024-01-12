@@ -317,17 +317,21 @@ const choicePressed = (event = {target:{name:'default'}}) => {
             switch(event.target.name){
                 case 'yes':
                     chapter +=2;
+                    updateImage(images.bedroom.allBeds);
                     updateStory(
                         `Jaa, va skönt!`, 
                         [{content:'Gå vidare'}]);
                 break;
                 case 'no':
+                    updateImage(images.bedroom.allBeds);
+
                     chapter++;
                     if(certainChoices.amountOfBowlsEaten===0 && certainChoices.chairsBroken === 0){
                         updateStory(
                             `Nej, varför skulle du göra det, när du nu varit så snäll hela denna saga?`, 
                             [{content:'...Tack?'}]);
                     }
+
                     updateStory(
                         `Nej, du känner att DÄR går gränsen ändå för vad man får och inte får göra.`, 
                         [{content:'Gå vidare'}]);
@@ -483,6 +487,7 @@ const choicePressed = (event = {target:{name:'default'}}) => {
                     }
                 break;
                 default:
+                    updateImage(images.bedroom.allBeds);
                     updateStory(`Det finns en stor säng, en mellanstor säng och en liten säng. Vilken vill du lägga dig i och vila?`, 
                     [{content:'Den största sängen',name:'largeBed'},{content:' Den mellanstora sängen',name:'mediumBed'}, {content:'Den lilla sängen',name:'smallBed'}]
                     );
