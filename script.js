@@ -36,6 +36,9 @@ let images = {
         smallAndMediumBeds:    'kitchen/bedroom-smallAndMediumBeds.jpg',
         smallAndLargeBeds:     'kitchen/bedroom-smallAndLargeBeds.jpg',
         mediumAndlargeBeds:    'kitchen/bedroom-mediumAndLargeBeds.jpg'
+    },
+    pond:{
+        bearsFishing: 'pond/pond-with-bears.jpg'
     }
 
 }
@@ -349,7 +352,7 @@ const choicePressed = (event = {target:{name:'default'}}) => {
             
             switch(event.target.name){
                 case 'go':
-                    
+                    updateImage(images.pond.bearsFishing);
                     updateStory(
                         `En bit på vägen så möter du tre björnar som står och fiskar, vilket i sig är en helt sjuk bild att måla upp i huvudet så om jag har hittat en bild som kan visualisera detta scenario så säger jag bara: varsågod, njut!.\n\nDu håller avstånd och går därifrån, samtidigt som du ser att de avslutar sin fiskeverksamhet för dagen och traskar vidare mot det hus du precis har vandaliserat!!`, 
                         [{content:'Läs mer', name:'goPageTwo'}]);
@@ -501,7 +504,7 @@ const choicePressed = (event = {target:{name:'default'}}) => {
                         break;
                         case 'windowPageTwo':
                             chapter = 0;    
-                            updateStory(`Medan du står skräckslagen så kommer "The Millennium Falcon" från StarWars och fullständigt spränger huset i bitar, med björnarna kvar i det. När skeppet sen landar så kliver en mer rakad man och en mindre rakad man ut. Den mer rakade mannen deklarerar sig som Hans-Olof. Sen drop-kickar han dig i ansiktet och springer iväg till resterna av stugan för att se om det finns något tillagat kött att ta med på resten utav färden genom galaxen.`,
+                            updateStory(`Medan du står skräckslagen så kommer "The Millennium Falcon" från "Star Wars" och fullständigt spränger huset i bitar, med björnarna kvar i det. När skeppet sen landar så kliver en mer rakad man och en mindre rakad man ut. Den mer rakade mannen deklarerar sig som Hans-Olof, drop-kickar dig i ansiktet och springer sedan iväg till resterna av stugan för att se om det finns något tillagat kött att ta med den fortsatta resan genom galaxen.`,
                                 [{content:'Helt sjukt, men okej'}]);
                         break;
                         default:
