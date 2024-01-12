@@ -6,7 +6,7 @@ let certainChoices = {};
 let images = {
     intro: 'start/intro.jpg',
     cabin: 'outside/cabin.jpg',
-    door: 'outside/door.png',
+    door: 'outside/door.jpg',
     kitchen:{
         allBowls:               'kitchen/kitchen-allBowls.jpg',
         noBowls:                'kitchen/kitchen-noBowls.jpg',
@@ -18,24 +18,24 @@ let images = {
         mediumAndlargeBowls:    'kitchen/kitchen-mediumAndLargeBowls.jpg'
     },
     livingroom:{
-        allChairs:               'kitchen/livingroom-allChairs.jpg',
-        noChairs:                'kitchen/livingroom-noChairs.jpg',
-        smallChair:              'kitchen/livingroom-smallChair.jpg',
-        mediumChair:             'kitchen/livingroom-mediumChair.jpg',
-        largeChair:              'kitchen/livingroom-largeChair.jpg',
-        smallAndMediumChairs:    'kitchen/livingroom-smallAndMediumChairs.jpg',
-        smallAndLargeChairs:     'kitchen/livingroom-smallAndLargeChairs.jpg',
-        mediumAndlargeChairs:    'kitchen/livingroom-mediumAndLargeChairs.jpg'
+        allChairs:               'livingroom/livingroom-allChairs.jpg',
+        noChairs:                'livingroom/livingroom-noChairs.jpg',
+        smallChair:              'livingroom/livingroom-smallChair.jpg',
+        mediumChair:             'livingroom/livingroom-mediumChair.jpg',
+        largeChair:              'livingroom/livingroom-largeChair.jpg',
+        smallAndMediumChairs:    'livingroom/livingroom-smallAndMediumChairs.jpg',
+        smallAndLargeChairs:     'livingroom/livingroom-smallAndLargeChairs.jpg',
+        mediumAndlargeChairs:    'livingroom/livingroom-mediumAndLargeChairs.jpg'
     },
     bedroom:{
-        allBeds:               'kitchen/bedroom-allBeds.jpg',
-        noBeds:                'kitchen/bedroom-noBeds.jpg',
-        smallBed:              'kitchen/bedroom-smallBed.jpg',
-        mediumBed:             'kitchen/bedroom-mediumBed.jpg',
-        largeBed:              'kitchen/bedroom-largeBed.jpg',
-        smallAndMediumBeds:    'kitchen/bedroom-smallAndMediumBeds.jpg',
-        smallAndLargeBeds:     'kitchen/bedroom-smallAndLargeBeds.jpg',
-        mediumAndlargeBeds:    'kitchen/bedroom-mediumAndLargeBeds.jpg'
+        allBeds:               'bedroom/bedroom-allBeds.jpg',
+        noBeds:                'bedroom/bedroom-noBeds.jpg',
+        smallBed:              'bedroom/bedroom-smallBed.jpg',
+        mediumBed:             'bedroom/bedroom-mediumBed.jpg',
+        largeBed:              'bedroom/bedroom-largeBed.jpg',
+        smallAndMediumBeds:    'bedroom/bedroom-smallAndMediumBeds.jpg',
+        smallAndLargeBeds:     'bedroom/bedroom-smallAndLargeBeds.jpg',
+        mediumAndlargeBeds:    'bedroom/bedroom-mediumAndLargeBeds.jpg'
     },
     pond:{
         bearsFishing: 'pond/pond-with-bears.jpg'
@@ -170,6 +170,7 @@ const choicePressed = (event = {target:{name:'default'}}) => {
                 break;
                 case 'no':
                     chapter+=2;
+                    updateImage(images.kitchen.allBowls);
                     updateStory(
                         `Du tänker att det är inte så snällt att äta upp andras mat, speciellt när de förmodligen lagt i ordning det på matbordet. Vem vet, de kanske bara är ute på en promenad?`,
                         [{content:'Gå vidare'}]
@@ -265,7 +266,7 @@ const choicePressed = (event = {target:{name:'default'}}) => {
                 case 'largeChair':
                     let extraInfo = certainChoices.amountOfBowlsEaten >0 ? '\nDet måste ha varit gröten som gjort dig superstark' : '\nHur i hela lyckades du egentligen med detta???';
                     updateStory(
-                        certainChoices.largeChairBroken ? `Stolen är slungad in i ett träd och lyckats stanna kvar i trädtoppen. ` : 'När du sätter dig på den stora stolen så känner du att den är fruktansvärt hård, obekväm och allmänt ful.\n\nAv ren aggressivitet tar du tag i stolen och slungar ut den, rent utav övermänskligt, rakt ut genom det öppna fönstret i vardagsrummet.',
+                        certainChoices.largeChairBroken ? `Stolen är slungad in i ett träd och lyckats stanna kvar i trädtoppen. ${extraInfo}` : 'När du sätter dig på den stora stolen så känner du att den är fruktansvärt hård, obekväm och allmänt ful.\n\nAv ren aggressivitet tar du tag i stolen och slungar ut den, rent utav övermänskligt, rakt ut genom det öppna fönstret i vardagsrummet.',
                         [{content:'Gå tillbaka'}]);
                     certainChoices.damageControl += !certainChoices.largeChairBroken ? 1: 0;
                     certainChoices.largeChairBroken = true;
@@ -358,26 +359,32 @@ const choicePressed = (event = {target:{name:'default'}}) => {
                         [{content:'Läs mer', name:'goPageTwo'}]);
                 break;
                 case 'goPageTwo':
+                    updateImage(images.pond.bearsFishing);
 
                     updateStory(
                         `I ren panik så börjar du fundera på vad du egentligen gjorde där inne.`, 
                         [{content:'Fundera klart', name:'goPageThree'}]);
                 break;
                 case 'goPageThree':
+                    updateImage(images.intro);
 
                     updateStory(
                         `Du:\n\nÅt ${certainChoices.amountOfBowlsEaten >1 ? `${certainChoices.amountOfBowlsEaten} portioner` : certainChoices.amountOfBowlsEaten === 0 ? 'ingen' : '1 portion'} gröt, ${certainChoices.chairsBroken < 1 ? 'inga stolar' : certainChoices.chairsBroken === 1 ? '1 stol' : `${certainChoices.chairsBroken} stolar`} gick sönder och du sov inte över.\n\nPoäng: Hade jag haft ett poängsystem så hade du antingen fått full pott eller noll!`, 
                         [{content:'Slutliga poäng', name:'goPageThree'}]);                
                 break;
                 case 'what':
+                    updateImage(images.intro);
+
                     updateStory(
                         `Asså, det här är ju en saga. Jag trodde vi var på samma blad när det gällde den biten, men vi har ju olika grad av inlevelse...\n\nFörresten, har du fått det där sjuka slutet på spelet när 'The Millennium Falcon' anländer, spränger stugan och inte nog med det: Hans Olof hoppar ut och drop-kickar dig i ansiktet? Kan vara så att jag inte orkade fixa det, men man vet ju aldrig.. \n`, 
                         [{content:'Slutliga poäng', name:'whatPageTwo'}]);    
                 break;
                 case 'whatPageTwo':
+                    updateImage(images.intro);
                     updateStory(``);
                 break;
                 default:
+                    updateImage(images.intro);
                     let emotion = 'promenerar ut';
                     if(certainChoices.smallChairBroken){
                         emotion = certainChoices.largeChairBroken && certainChoices.mediumChairBroken  ? 'stormar apatiskt ut' : 
