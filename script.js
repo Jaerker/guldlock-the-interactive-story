@@ -6,7 +6,7 @@ let certainChoices = {};
 let images = {
     intro: 'start/intro.jpg',
     cabin: 'outside/cabin.jpg',
-    door: 'outside/door.jpg',
+    door:  'outside/door.jpg',
     kitchen:{
         allBowls:               'kitchen/kitchen-allBowls.jpg',
         noBowls:                'kitchen/kitchen-noBowls.jpg',
@@ -90,7 +90,7 @@ const updateStory = (storyContent, buttonContent = null, isAddon = false) => {
     choiceSection.innerHTML = createChoices(buttonContent);
 }
 
-//createChoices([{bContent:'Vad det ska stå i knappen',bName:'hur man kollar efter knappen i switch case för kapitlet'}]);
+//createChoices([{content:'Vad det ska stå i knappen',name:'hur man kollar efter knappen i switch case för kapitlet'}]);
 
 
 const choicePressed = (event = {target:{name:'default'}}) => {
@@ -121,8 +121,14 @@ const choicePressed = (event = {target:{name:'default'}}) => {
                     //GÅR VIDARE
                     choicePressed();
                 break;
+                case 'yes':
+                    chapter=-1;
+                    //GÅR VIDARE
+                    choicePressed(event);
+                break;
                 default:
-                    updateStory(`THE END\n\n hoppas det var kul!`);
+                    updateImage(images.intro);
+                    updateStory(`THE END\n\n hoppas det var kul!`, [{content:'Köra igen?', name:'yes'}]);
                 break;
             }
         break;
@@ -332,9 +338,13 @@ const choicePressed = (event = {target:{name:'default'}}) => {
                             [{content:'...Tack?'}]);
                     }
 
-                    updateStory(
-                        `Nej, du känner att DÄR går gränsen ändå för vad man får och inte får göra.`, 
-                        [{content:'Gå vidare'}]);
+                    else{
+
+                        updateStory(
+                            `Nej, du känner att DÄR går gränsen ändå för vad man får och inte får göra.`, 
+                            [{content:'Gå vidare'}]);
+                    }
+
                 break;
                 default:
                     updateImage(images.bedroom.allBeds);
@@ -371,10 +381,10 @@ const choicePressed = (event = {target:{name:'default'}}) => {
                 break;
                 case 'goPageThree':
                     updateImage(images.intro);
-
+                    chapter = 0;
                     updateStory(
                         `Du:\n\nÅt ${certainChoices.amountOfBowlsEaten >1 ? `${certainChoices.amountOfBowlsEaten} portioner` : certainChoices.amountOfBowlsEaten === 0 ? 'ingen' : '1 portion'} gröt, ${certainChoices.chairsBroken < 1 ? 'inga stolar' : certainChoices.chairsBroken === 1 ? '1 stol' : `${certainChoices.chairsBroken} stolar`} gick sönder och du sov inte över.\n\nPoäng: Hade jag haft ett poängsystem så hade du antingen fått full pott eller noll!`, 
-                        [{content:'Slutliga poäng', name:'goPageThree'}]);                
+                        [{content:'Tack och hej!'}]);                
                 break;
                 case 'what':
                     updateImage(images.intro);
@@ -417,11 +427,6 @@ const choicePressed = (event = {target:{name:'default'}}) => {
                     updateStory(`Oj, den här sängen var verkligen hård! hur kan man sova så här?? Du må vara trött efter all kaos med stolarna, men du lyckas inte somna.\n\nEfter en liten stund så hör du tunga steg mot stugan.Du hoppar upp ur sängen - som säkert är gjord av stenblock - och tittar ut genom fönstret. Där går tre massiva björnar på sina bakben mot stugan som ännu inte sett dig. Den ena sneglar mot trädet där du kastade ut stolen och ser lite arg ut!\n\n Du tar chansen och rusar ut. Förhoppningsvis så såg de dig inte. Tänk vad de skulle göra om de skulle se resten av stolarna i hemmet!`,
                     [{content:'Gå vidare'}]);
 
-                }if(certainChoices.amountOfBowlsEaten === 3 && certainChoices.chairsBroken <= 2){ //ÄTIT MASSA GRÖT, INTE TAGIT SÖNDER ALLA STOLAR
-                    chapter = 0; 
-                    updateStory(`Oj, den här sängen var verkligen hård! hur kan man sova så här?? Du lyckas, i och med att du tryckt i dig gröt för mer än 3 fullvuxna människor. Men du vaknar lite senare av att dörren öppnas till stugan. När du snabbt hoppar ur sängen och gömmer dig under, så hör du vrål och rytanden. De börjar leta sig genom hemmet, och till slut finner de dig under sängen. Tyvärr så blev du deras nya frukost, med tanke på att du åt upp deras gröt!`,
-                    [{content:'Gå vidare'}]);
-
                 }if(certainChoices.amountOfBowlsEaten === 1 && certainChoices.chairsBroken === 1){ //BARA ÄTIT EN GRÖT OCH TAGIT SÖNDER EN STOL
                     chapter++;
                     updateStory(`Oj, den här sängen var verkligen hård! hur kan man sova så här?? Nej, säger du. Du går upp, tänker att det räcker för idag med vandalisering av andras ägodelar och traskar mot dörren. Men då möts du av tre stora björnar som är på väg till huset.\n\nLivrädd springer du, med björnarna hack i häl. När du lyckas komma upp i ett träd så märker du att de inte kan komma åt dig och du pustar ut.`,
@@ -431,6 +436,12 @@ const choicePressed = (event = {target:{name:'default'}}) => {
                     chapter = 0; 
                     updateStory(`Oj, den här sängen var verkligen hård! hur kan man sova så här?? Nej, jag har ju ändå inte förstört något eller vandaliserat något idag så jag behöver inte börja nu, säg!\n\nDu bäddar om sängen, viker en varsin handduk i form av en rektangel på sängen och går ut från stugan.\n\nNär du passerat en bra bit, ser du tillbaka och märker att tre björnar närmar sig stugan. De ser ut att vara en trevlig familj. Den mindre björnen sneglar mot ditt håll och viftar med sin tass. Du viftar tillbaka och fortsätter på din väg hem.\n\Nu är du hungrig, trött och rik av upplevelser. Men mest av allt: kriminell som bryter sig in i andras hus. Tur att du inte gjorde något dumt!`,
                     [{content:'Gå vidare'}]);
+                }
+                else{
+                    chapter = 0; 
+                    updateStory(`Oj, den här sängen var verkligen hård! hur kan man sova så här?? Du lyckas, i och med att du tryckt i dig gröt för mer än 3 fullvuxna människor. Men du vaknar lite senare av att dörren öppnas till stugan. När du snabbt hoppar ur sängen och gömmer dig under, så hör du vrål och rytanden. De börjar leta sig genom hemmet, och till slut finner de dig under sängen. Tyvärr så blev du deras nya frukost, med tanke på att du åt upp deras gröt!`,
+                    [{content:'Gå vidare'}]);
+
                 }
                 break;
 
@@ -446,11 +457,6 @@ const choicePressed = (event = {target:{name:'default'}}) => {
                         updateStory(`Oj va mjuk sängen var! Likt kvicksandens effekt så sjunker du sakta ner i sängen och blir mer och mer immobil. Du försöker klamra dig upp, och efter en del kämpande så är du uppe ur sängen. Men när du väl ställer dig upp på trötta ben så ser du tre björnar i rummet som iakttagit dig en längre stund. Hur lång tid tog det egentligen att ta sig ur sängen? Det är till och med redan mörkt ute!\n\nPå grund av att du förstört alla stolar och ätit upp en viss mängd gröt så väljer de att göra en gryta av dig.`,
                         [{content:'Gå vidare'}]);
 
-                    }if(certainChoices.amountOfBowlsEaten === 3 && certainChoices.chairsBroken <= 2){ //ÄTIT MASSA GRÖT, INTE TAGIT SÖNDER ALLA STOLAR
-                        chapter = 0; 
-                        updateStory(`Oj va mjuk sängen var! Likt kvicksandens effekt så sjunker du sakta ner i sängen och blir mer och mer immobil. Du försöker klamra dig upp, och efter en hel del kämpande så är du uppe ur sängen. Men när du väl ställer dig upp på trötta ben så ser du tre björnar i rummet som iakttagit dig en längre stund. Hur lång tid tog det egentligen att ta sig ur sängen? Det är till och med redan mörkt ute!\n\nPå grund av att du förstört alla stolar och ätit upp all gröt så väljer de att göra en kvällsmacka av dig.`,
-                        [{content:'Gå vidare'}]);
-
                     }if(certainChoices.amountOfBowlsEaten === 1 && certainChoices.chairsBroken === 1){ //BARA ÄTIT EN GRÖT OCH TAGIT SÖNDER EN STOL
                         chapter = 0;
                         updateStory(`Oj va mjuk sängen var! Likt kvicksandens effekt så sjunker du sakta ner i sängen och blir mer och mer immobil. Du försöker klamra dig upp, och med tanke på att du inte frossat gröt och suttit sönder så många stolar, så har du tålamod och energi nog att snabbt ta dig ur den. Men när du väl står redo så hör du hur några närmar sig dörren till stugan. Du gömmer dig snabbt i en vrå och iakttar tre björnar som går in. De verkar väldigt arga över att en skål gröt är uppäten, och även att en stol är sönder.\n\n Björnarna letar, men hittar dig inte. När de väl somnat så smyger du ut, springer hem och väljer att aldrig gå till den stugan igen.`,
@@ -460,6 +466,11 @@ const choicePressed = (event = {target:{name:'default'}}) => {
                         chapter++;
                         updateStory(`Du känner lätt på sängen först. Oj va mjuk den var!\n\nNej, där kommer jag nog fastna, säger du. Du börjar gå mot dörren, och precis i samma stund så står det 3 björnar framför dig. Du blir skräckslagen och springer längre in i huset och försöker gömma dig. Björnarna ryter och vrålar medans de sakta närmar sig dig. Vad väljer du att göra?`,
                         [{content:'Gömma mig under sängen', name:'underBed'},{content:'Hoppa ut genom fönstret', name:'window'}]);
+                    }else{ //ÄTIT MASSA GRÖT, INTE TAGIT SÖNDER ALLA STOLAR
+                        chapter = 0; 
+                        updateStory(`Oj va mjuk sängen var! Likt kvicksandens effekt så sjunker du sakta ner i sängen och blir mer och mer immobil. Du försöker klamra dig upp, och efter en hel del kämpande så är du uppe ur sängen. Men när du väl ställer dig upp på trötta ben så ser du tre björnar i rummet som iakttagit dig en längre stund. Hur lång tid tog det egentligen att ta sig ur sängen? Det är till och med redan mörkt ute!\n\nPå grund av att du förstört alla stolar och ätit upp all gröt så väljer de att göra en kvällsmacka av dig.`,
+                        [{content:'Gå vidare'}]);
+
                     }
                 break;
 
@@ -474,16 +485,16 @@ const choicePressed = (event = {target:{name:'default'}}) => {
                         updateStory(`Åh, sängen är helt perfekt! Här kommer du kunna sova som en utslagen alkoholist!\n\nNär du senare vaknar så står det tre björnar och stirrar på dig. På grund av att du delvis har vandaliserat deras hem så väljer de att göra en calzone av dig.`,
                         [{content:'Gå vidare'}]);
 
-                    }if(certainChoices.amountOfBowlsEaten === 1 && certainChoices.chairsBroken === 1){ //BARA ÄTIT EN GRÖT OCH TAGIT SÖNDER EN STOL
-                        chapter = 0;
-                        updateStory(`Åh, sängen är helt perfekt! Här kommer du kunna sova som en utslagen alkoholist!\n\nNär du senare vaknar så står det tre björnar och stirrar på dig. På grund av att du inte förstört så mycketså ger de dig ett försprång på 20 sekunder. Du tar vara på det och springer allt vad du kan och lyckas ta dig hem, där du funderar över dina val i livet.`,
-                        [{content:'Gå vidare'}]);
-
                     }if(certainChoices.amountOfBowlsEaten === 0 && certainChoices.chairsBroken === 0){ //INTE GJORT NÅGOT
                         chapter = 0;
                         updateStory(`Åh, sängen är helt perfekt! Här kommer du kunna sova som en utslagen alkoholist!\n\nNär du senare vaknar så står det tre björnar och stirrar på dig. De kollar fundersamt på dig och undrar vad du egentligen gör här. Skräckslagen springer du ut, medans bjönarna inte riktigt vet vad de ska göra.`,
                         [{content:'Gå vidare'}]);
     
+                    }else{ //BARA ÄTIT EN GRÖT OCH TAGIT SÖNDER EN STOL
+                        chapter = 0;
+                        updateStory(`Åh, sängen är helt perfekt! Här kommer du kunna sova som en utslagen alkoholist!\n\nNär du senare vaknar så står det tre björnar och stirrar på dig. På grund av att du inte förstört så mycketså ger de dig ett försprång på 20 sekunder. Du tar vara på det och springer allt vad du kan och lyckas ta dig hem, där du funderar över dina val i livet.`,
+                        [{content:'Gå vidare'}]);
+
                     }
                 break;
                 default:
